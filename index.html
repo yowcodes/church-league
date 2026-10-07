@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Church League Keepers</title>
+<meta name="description" content="Church League 2026-27 keeper planner: rosters, keeper costs, rookie draft order, auction budgets.">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#15191e; --muted:#5f6b7a; --line:#e3e7ec;
+  --accent:#1f5fbf; --accent-soft:#e8f0fc; --good:#1a7f4b; --good-soft:#e6f4ec;
+  --bad:#b42318; --bad-soft:#fdecea; --warn:#9a5b00; --warn-soft:#fff4e0; --chip:#eef1f5;
+  --tip-bg:#1f2630; --tip-ink:#f3f5f8; --shadow:0 1px 2px rgba(16,24,40,.06);
+  --heat:26,127,75; --cold:180,35,24;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1318; --panel:#171c23; --ink:#e8ecf1; --muted:#9aa6b4; --line:#2a313b;
+    --accent:#6ea1ff; --accent-soft:#1c2a42; --good:#4cc38a; --good-soft:#15291f;
+    --bad:#ff7b72; --bad-soft:#3a1d1b; --warn:#f0b35a; --warn-soft:#33270f; --chip:#222933;
+    --tip-bg:#e8ecf1; --tip-ink:#11161c; --shadow:none; --heat:76,195,138; --cold:255,123,114;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1318; --panel:#171c23; --ink:#e8ecf1; --muted:#9aa6b4; --line:#2a313b;
+  --accent:#6ea1ff; --accent-soft:#1c2a42; --good:#4cc38a; --good-soft:#15291f;
+  --bad:#ff7b72; --bad-soft:#3a1d1b; --warn:#f0b35a; --warn-soft:#33270f; --chip:#222933;
+  --tip-bg:#e8ecf1; --tip-ink:#11161c; --shadow:none; --heat:76,195,138; --cold:255,123,114;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+button{font:inherit}
+
+/* ---- layout + collapsible sidebar ---- */
+.app{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh;transition:grid-template-columns .15s}
+body.nav-collapsed .app{grid-template-columns:0 minmax(0,1fr)}
+nav.side{background:var(--panel);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:hidden;white-space:nowrap}
+body.nav-collapsed nav.side{padding:0;border:0}
+.brand{display:flex;justify-content:space-between;align-items:flex-start;padding:0 4px 0 8px}
+.brand b{font-size:17px}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:13px;margin-top:2px}
+.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:8px;width:30px;height:30px;cursor:pointer;display:grid;place-items:center;font-size:16px;line-height:1}
+.iconbtn:hover{color:var(--accent);border-color:var(--accent)}
+nav.side ul{list-style:none;margin:22px 0 0;padding:0}
+nav.side a{display:block;padding:9px 10px;border-radius:8px;color:var(--ink);text-decoration:none;font-weight:500}
+nav.side a:hover{background:var(--chip)}
+nav.side a.on{background:var(--accent-soft);color:var(--accent)}
+.side-foot{position:absolute;bottom:18px;left:22px;color:var(--muted);font-size:12px}
+#openNav{position:fixed;top:14px;left:14px;z-index:20;display:none;box-shadow:var(--shadow)}
+body.nav-collapsed #openNav{display:grid}
+body.nav-collapsed main{padding-left:64px}
+main{padding:24px 32px 60px;max-width:1180px;width:100%}
+h1{font-size:24px;margin:0 0 16px;display:flex;align-items:center;gap:8px}
+h2.sec{font-size:17px;margin:26px 0 10px;display:flex;align-items:center;gap:8px}
+section{display:none}
+section.on{display:block}
+
+/* ---- tooltips ---- */
+.tip{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1.5px solid currentColor;color:var(--muted);font-size:11px;font-weight:700;cursor:help;vertical-align:1px;margin-left:4px;flex:none;font-style:normal;text-transform:none;letter-spacing:0}
+.tip:hover,.tip:focus{color:var(--accent);outline:none}
+#tooltip{position:fixed;z-index:100;max-width:280px;background:var(--tip-bg);color:var(--tip-ink);font-size:13px;font-weight:400;line-height:1.4;padding:8px 10px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .1s;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#tooltip.show{opacity:1}
+
+/* ---- common bits ---- */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:7px 12px;font-size:14px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.dates{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.date{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;font-size:12.5px;color:var(--muted)}
+.date b{display:block;font-size:14px;color:var(--ink)}
+.muted{color:var(--muted)}
+
+/* ---- keeper planner ---- */
+.teamhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.teamhead h2{margin:0;font-size:20px}
+.teamhead .tn{color:var(--muted);font-weight:500}
+.calc{position:sticky;top:0;z-index:6;background:var(--bg);padding:8px 0 10px;margin:0 -2px;}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.stat{background:var(--panel);padding:8px 12px}
+.stat .k{font-size:12px;color:var(--muted);display:flex;align-items:center}
+.stat .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat.neg .v{color:var(--bad)}
+.stat.hi .v{color:var(--accent)}
+.status{margin-top:8px;border-radius:8px;padding:7px 12px;font-size:14px;display:flex;gap:6px;align-items:center}
+.status.bad{background:var(--bad-soft);color:var(--bad)}
+.status.warn{background:var(--warn-soft);color:var(--warn)}
+.status.ok{background:var(--good-soft);color:var(--good)}
+.status.idle{background:var(--chip);color:var(--muted)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 10px}
+.toggles{margin-left:auto;display:flex;gap:14px;flex-wrap:wrap}
+label.tog{display:inline-flex;gap:6px;align-items:center;font-size:14px;color:var(--muted);cursor:pointer}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:7px 7px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+th{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+th.grp{border-left:1px solid var(--line)}
+td.grp{border-left:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+tr.drop td{color:var(--muted)}
+tr.kept td{background:var(--good-soft)}
+td.player{white-space:normal;min-width:220px}
+.nw{white-space:nowrap}
+.pname{font-weight:600}
+.pmeta{color:var(--muted);font-size:12.5px}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;border-radius:4px;padding:2px 6px;margin-left:6px;vertical-align:1px;white-space:nowrap;cursor:help}
+.badge.drop{background:var(--bad-soft);color:var(--bad)}
+.badge.ir{background:var(--warn-soft);color:var(--warn)}
+.badge.last{background:var(--chip);color:var(--muted)}
+.keep{appearance:none;width:22px;height:22px;border:2px solid var(--line);border-radius:6px;cursor:pointer;display:grid;place-content:center;background:var(--panel);margin:0}
+.keep:checked{background:var(--good);border-color:var(--good)}
+.keep:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.keep:disabled{opacity:.35;cursor:not-allowed}
+.statcol{color:var(--ink);font-size:13px;padding-left:4px;padding-right:4px}
+th.statcol{font-size:11px}
+.next{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.mstat{display:none;margin-top:5px}
+.mstat .pills{display:flex;flex-wrap:wrap;gap:3px}
+.mstat .pill{font-size:11.5px;border-radius:5px;padding:1px 6px;background:var(--chip);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mstat .pill b{margin-left:3px}
+td.h{font-weight:600}
+.badge.cy{background:var(--chip);color:var(--muted)}
+.legend{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted);padding:8px 10px;border-top:1px solid var(--line)}
+.legend i{display:inline-block;width:18px;height:12px;border-radius:3px}
+.tname{font-size:12.5px;color:var(--muted);font-weight:500;margin-left:5px}
+.arrow{color:var(--muted);margin:0 8px;font-weight:400}
+.ov{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.ov a{display:block;padding:14px 16px;text-decoration:none;color:var(--ink)}
+.ov a:hover{border-color:var(--accent)}
+.ov b{display:block;margin-bottom:3px}
+.ov span{color:var(--muted);font-size:13.5px}
+tr.drop .statcol{color:var(--muted)}
+body.hide-stats .statcol,body.hide-stats .statlegend{display:none}
+.dnp{color:var(--muted);font-size:12.5px}
+
+/* ---- rookie order ---- */
+.ord{display:grid;gap:8px}
+.pick{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:10px 14px}
+.pick .n{font-size:22px;font-weight:800;color:var(--accent);text-align:center}
+.pick .who{font-weight:700;font-size:16px;display:flex;align-items:center}
+.pick .how{color:var(--muted);font-size:13px}
+.via{font-size:12px;font-weight:600;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:3px 9px;white-space:nowrap}
+
+/* ---- budgets ---- */
+.band{position:relative;height:8px;background:var(--chip);border-radius:4px;min-width:120px}
+.band i{position:absolute;top:-3px;width:3px;height:14px;background:var(--accent);border-radius:2px}
+.band .mid{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--muted);opacity:.5}
+.pos{color:var(--good);font-weight:600}.negv{color:var(--bad);font-weight:600}
+
+/* ---- trades ---- */
+.trades{display:grid;gap:12px}
+.trade{overflow:hidden}
+.trade .head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.trade .title{font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.money{font-size:12px;font-weight:700;background:var(--good-soft);color:var(--good);border-radius:999px;padding:2px 9px}
+.trade .d{color:var(--muted);font-size:13px;white-space:nowrap}
+.swap{table-layout:fixed}
+.swap th{width:50%;background:var(--panel)}
+.swap th + th,.swap td + td{border-left:1px solid var(--line)}
+.swap td{vertical-align:top;white-space:normal}
+.swap ul{margin:0;padding:0;list-style:none}
+.swap li{padding:2px 0}
+.swap li.cash{color:var(--good);font-weight:600}
+.swap li.pk{color:var(--accent);font-weight:600}
+
+.mobile-nav{display:none}
+@media (max-width:860px){
+  .app,body.nav-collapsed .app{grid-template-columns:minmax(0,1fr)}
+  nav.side,#openNav,body.nav-collapsed #openNav{display:none}
+  body.nav-collapsed main{padding-left:16px}
+  .mobile-nav{display:flex;position:sticky;top:0;z-index:8;height:46px;background:var(--panel);border-bottom:1px solid var(--line);overflow-x:auto;padding:0 8px}
+  .mobile-nav a{padding:12px 12px;white-space:nowrap;color:var(--muted);text-decoration:none;font-weight:600;font-size:14px;border-bottom:2px solid transparent}
+  .mobile-nav a.on{color:var(--accent);border-bottom-color:var(--accent)}
+  main{padding:16px 16px 50px}
+  .calc{top:46px}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat .v{font-size:17px}
+  .hide-sm,.statcol{display:none}
+  body:not(.hide-stats) .mstat{display:block}
+  th,td{padding:7px 6px}
+}
+</style>
+</head>
+<body>
+<button class="iconbtn" id="openNav" aria-label="Show menu" title="Show menu">☰</button>
+<div class="app">
+  <nav class="side" aria-label="Sections">
+    <div class="brand"><div><b>Church League</b><small id="seasonSmall"></small></div>
+      <button class="iconbtn" id="closeNav" aria-label="Hide menu" title="Hide menu">‹</button></div>
+    <ul id="sideNav"></ul>
+    <div class="side-foot" id="foot"></div>
+  </nav>
+  <div>
+    <div class="mobile-nav" id="mobileNav" role="tablist"></div>
+    <main>
+      <section id="overview">
+        <h1>Church League 2026-27</h1>
+        <div class="dates" id="dates"></div>
+        <div class="ov" id="ovCards"></div>
+      </section>
+
+      <section id="rosters">
+        <h1>Keeper planner <span class="tip" tabindex="0" data-tip="Pick a team and check the players you'd keep. Budget, money left and max bid update as you go. Your picks are saved in this browser only; nobody else sees them.">?</span></h1>
+        <div class="chips" id="teamChips" role="tablist" aria-label="Teams"></div>
+        <div id="teamView"></div>
+      </section>
+
+      <section id="rookies">
+        <h1>Rookie draft order <span class="tip" tabindex="0" data-tip="Set by 2025-26 playoff finish. Picks 1-4: rookie-bracket finishers (champion first). 5-6: winner and loser of the 5th-place game. 7-10: 4th place, 3rd place, runner-up, champion. Every pick costs $1.">?</span></h1>
+        <div class="ord" id="rookieList"></div>
+        <h2 class="sec">Pick trades</h2>
+        <div class="trades" id="pickTrades"></div>
+      </section>
+
+      <section id="budgets">
+        <h1>Auction budgets <span class="tip" tabindex="0" data-tip="Everyone starts at $200. Money traded last season moves the starting number. Every team must stay between $180 and $220. The trades behind each number are under Money trades.">?</span></h1>
+        <div class="panel scroll"><table id="budgetTable"></table></div>
+      </section>
+
+      <section id="trades">
+        <h1>Money trades <span class="tip" tabindex="0" data-tip="Every 2025-26 trade that moved 2026-27 auction money, from the Fantrax trade comments. If one is missing or wrong, tell Ryan before keepers are due.">?</span></h1>
+        <div class="chips" id="tradeFilter"></div>
+        <div class="trades" id="tradeList"></div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="tooltip" role="tooltip"></div>
+
+<script>
+const DATA = {"season": "2026-27", "statsSeason": "2025-26", "generated": "Oct 7, 2026 12:33 AM", "snapshot": {"label": "baseline_2026-10-06", "taken": "2026-10-07T03:49:15Z"}, "dates": {"keeperDeadline": "2026-10-10T23:59:00", "auction": "2026-10-16T20:30:00"}, "rules": {"rosterSpots": 14, "rookieCost": 1, "band": [180, 220], "baseBudget": 200}, "teams": [{"owner_name": "Adam", "team_name": "Ball Is Life", "short_name": "BALL", "budget": 200, "players": [{"id": "04ewf", "name": "Bam Adebayo", "nba": "MIA", "pos": "PF,C", "ir": false, "cost": 39, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 29, "stats": [73, 506, 1145, 127, 329, 423, 1468, 732, 232, 86, 49, 120]}, {"id": "05uiq", "name": "Alperen Sengun", "nba": "HOU", "pos": "PF,C", "ir": false, "cost": 19, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [72, 583, 1123, 40, 260, 376, 1466, 641, 445, 85, 77, 227]}, {"id": "0527h", "name": "Naz Reid", "nba": "CHA", "pos": "PF,C", "ir": false, "cost": 17, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [77, 397, 871, 162, 90, 123, 1046, 477, 170, 76, 78, 126]}, {"id": "04azw", "name": "Lauri Markkanen", "nba": "UTA", "pos": "SF,PF", "ir": true, "cost": 16, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 29, "stats": [42, 384, 805, 115, 240, 268, 1123, 289, 89, 42, 21, 63]}, {"id": "027p0", "name": "Nikola Vucevic", "nba": "ORL", "pos": "C", "ir": true, "cost": 16, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 35, "stats": [64, 394, 799, 100, 77, 93, 965, 537, 213, 39, 41, 85]}, {"id": "05qu9", "name": "Immanuel Quickley", "nba": "TOR", "pos": "PG,SG", "ir": false, "cost": 15, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [70, 401, 905, 178, 170, 207, 1150, 282, 415, 92, 5, 102]}, {"id": "06mlk", "name": "Ajay Mitchell", "nba": "OKC", "pos": "PG,SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [57, 286, 590, 61, 141, 162, 774, 190, 206, 71, 18, 81]}, {"id": "02ym0", "name": "Andrew Wiggins", "nba": "MIA", "pos": "SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 31, "stats": [68, 390, 821, 138, 127, 162, 1045, 329, 182, 76, 69, 103]}, {"id": "042n1", "name": "Brandon Ingram", "nba": "LAC", "pos": "SG,SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 29, "stats": [77, 614, 1288, 135, 292, 356, 1655, 430, 284, 58, 55, 187]}, {"id": "03nwk", "name": "Kelly Oubre Jr.", "nba": "IND", "pos": "SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 30, "stats": [50, 254, 544, 86, 111, 145, 705, 252, 80, 68, 24, 69]}, {"id": "051ox", "name": "Nickeil Alexander-Walker", "nba": "ATL", "pos": "PG,SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [78, 548, 1195, 251, 277, 307, 1624, 268, 286, 102, 42, 162]}, {"id": "05qt0", "name": "Saddiq Bey", "nba": "NO", "pos": "SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [72, 436, 967, 151, 248, 295, 1271, 400, 182, 68, 7, 68]}, {"id": "04qrm", "name": "Collin Sexton", "nba": "LAL", "pos": "PG,SG", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [68, 360, 742, 112, 218, 255, 1050, 155, 223, 76, 10, 141]}, {"id": "04qru", "name": "Donte DiVincenzo", "nba": "MIN", "pos": "PG,SG", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 29, "stats": [82, 339, 835, 244, 78, 105, 1000, 336, 313, 104, 34, 118]}, {"id": "06v58", "name": "Tre Johnson", "nba": "WAS", "pos": "PG,SG", "ir": false, "cost": 6, "contract": 2029, "mustDrop": false, "keepThrough": "2028-29", "finalYear": false, "age": 20, "stats": [60, 271, 647, 115, 76, 87, 733, 170, 122, 33, 18, 93]}, {"id": "04ewm", "name": "Jarrett Allen", "nba": "CLE", "pos": "C", "ir": false, "cost": 48, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 28, "stats": [56, 337, 528, 1, 185, 261, 860, 476, 100, 55, 47, 75]}]}, {"owner_name": "Alex", "team_name": "10th in power rankings", "short_name": "Jokes", "budget": 210, "players": [{"id": "02nf1", "name": "Anthony Davis", "nba": "WAS", "pos": "PF,C", "ir": true, "cost": 43, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 33, "stats": [20, 169, 334, 10, 59, 81, 407, 221, 56, 22, 33, 41]}, {"id": "05qto", "name": "LaMelo Ball", "nba": "MIN", "pos": "PG", "ir": false, "cost": 41, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 25, "stats": [72, 506, 1244, 272, 161, 179, 1445, 347, 514, 87, 17, 202]}, {"id": "0621c", "name": "Jalen Duren", "nba": "DET", "pos": "C", "ir": false, "cost": 32, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 22, "stats": [70, 522, 803, 0, 321, 430, 1365, 737, 138, 57, 59, 130]}, {"id": "042nt", "name": "Ivica Zubac", "nba": "IND", "pos": "C", "ir": false, "cost": 14, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 29, "stats": [48, 288, 482, 0, 101, 142, 677, 509, 105, 18, 40, 86]}, {"id": "06mjz", "name": "Donovan Clingan", "nba": "POR", "pos": "C", "ir": false, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 22, "stats": [77, 356, 684, 84, 138, 203, 934, 892, 162, 44, 130, 95]}, {"id": "04ewn", "name": "OG Anunoby", "nba": "NY", "pos": "SF,PF", "ir": false, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 29, "stats": [67, 389, 804, 157, 183, 221, 1118, 351, 145, 104, 48, 123]}, {"id": "06mjv", "name": "Reed Sheppard", "nba": "HOU", "pos": "PG,SG", "ir": false, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 22, "stats": [82, 407, 946, 227, 69, 86, 1110, 238, 277, 122, 54, 123]}, {"id": "06mk1", "name": "Zach Edey", "nba": "MEM", "pos": "C", "ir": true, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [11, 62, 98, 1, 25, 32, 150, 122, 12, 7, 21, 26]}, {"id": "04ex8", "name": "Dillon Brooks", "nba": "PHO", "pos": "SG,SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 30, "stats": [56, 417, 959, 127, 170, 202, 1131, 203, 99, 57, 9, 98]}, {"id": "05wqo", "name": "Dru Smith", "nba": "MIA", "pos": "PG,SG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [70, 135, 325, 38, 87, 105, 395, 173, 180, 100, 21, 55]}, {"id": "04848", "name": "Fred VanVleet", "nba": "HOU", "pos": "PG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 32, "stats": null}, {"id": "06213", "name": "Keegan Murray", "nba": "SAC", "pos": "SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [23, 126, 300, 31, 38, 49, 321, 132, 38, 24, 36, 27]}, {"id": "01eo9", "name": "Jrue Holiday", "nba": "POR", "pos": "PG,SG", "ir": false, "cost": 8, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 36, "stats": [53, 320, 709, 137, 88, 105, 865, 245, 322, 54, 6, 146]}, {"id": "051ol", "name": "Darius Garland", "nba": "LAC", "pos": "PG", "ir": false, "cost": 7, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [45, 309, 672, 122, 105, 122, 845, 107, 301, 43, 8, 130]}, {"id": "05qtr", "name": "Devin Vassell", "nba": "SA", "pos": "SG,SF", "ir": false, "cost": 7, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [67, 330, 755, 166, 106, 130, 932, 269, 167, 57, 25, 60]}, {"id": "06211", "name": "Chet Holmgren", "nba": "OKC", "pos": "PF,C", "ir": false, "cost": 21, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 24, "stats": [69, 434, 779, 88, 225, 284, 1181, 615, 115, 43, 131, 107]}]}, {"owner_name": "Austin", "team_name": "Crossover Cringle", "short_name": "Santa", "budget": 186, "players": [{"id": "03e75", "name": "Nikola Jokic", "nba": "DEN", "pos": "C", "ir": false, "cost": 95, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 31, "stats": [65, 644, 1132, 112, 399, 480, 1799, 836, 697, 92, 54, 243]}, {"id": "01enh", "name": "Stephen Curry", "nba": "GS", "pos": "PG", "ir": true, "cost": 48, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 38, "stats": [43, 374, 799, 190, 204, 221, 1142, 154, 203, 49, 17, 121]}, {"id": "05uib", "name": "Cade Cunningham", "nba": "DET", "pos": "PG,SG", "ir": true, "cost": 47, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [64, 548, 1189, 125, 310, 382, 1531, 355, 634, 92, 54, 236]}, {"id": "05uig", "name": "Josh Giddey", "nba": "CHI", "pos": "PG,SG", "ir": false, "cost": 44, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 23, "stats": [54, 321, 717, 103, 174, 228, 919, 448, 494, 55, 27, 196]}, {"id": "04qsa", "name": "Jalen Brunson", "nba": "NY", "pos": "PG", "ir": false, "cost": 32, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 30, "stats": [74, 689, 1475, 195, 354, 421, 1927, 247, 503, 57, 8, 175]}, {"id": "051oh", "name": "Zion Williamson", "nba": "NO", "pos": "SF,PF", "ir": false, "cost": 32, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [62, 484, 807, 1, 333, 465, 1302, 353, 199, 60, 34, 126]}, {"id": "05qtj", "name": "Deni Avdija", "nba": "POR", "pos": "SG,SF,PF", "ir": false, "cost": 23, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [66, 492, 1064, 125, 489, 610, 1598, 454, 442, 51, 41, 253]}, {"id": "05uiu", "name": "Jalen Johnson", "nba": "ATL", "pos": "SF,PF", "ir": false, "cost": 20, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [72, 600, 1228, 120, 301, 382, 1621, 740, 566, 89, 31, 244]}, {"id": "05uii", "name": "Franz Wagner", "nba": "ORL", "pos": "SF,PF", "ir": false, "cost": 19, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [34, 244, 507, 48, 163, 198, 699, 177, 113, 32, 11, 58]}, {"id": "06cd4", "name": "Toumani Camara", "nba": "POR", "pos": "PF,C", "ir": false, "cost": 15, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [82, 392, 891, 219, 97, 137, 1100, 421, 201, 94, 35, 144]}, {"id": "05qt1", "name": "Payton Pritchard", "nba": "BOS", "pos": "PG", "ir": false, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [79, 506, 1091, 212, 121, 136, 1345, 312, 408, 58, 10, 109]}, {"id": "051pa", "name": "Kevin Porter", "nba": "MIL", "pos": "PG,SG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [38, 239, 514, 46, 137, 156, 661, 198, 280, 83, 19, 110]}, {"id": "0621t", "name": "Peyton Watson", "nba": "CLE", "pos": "SG,SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [54, 285, 581, 81, 138, 189, 789, 264, 111, 50, 61, 93]}, {"id": "06v5y", "name": "Dylan Harper", "nba": "SA", "pos": "PG,SG,SF", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 20, "stats": [69, 331, 656, 61, 90, 119, 813, 234, 266, 54, 24, 99]}, {"id": "06v5r", "name": "Egor Demin", "nba": "BKN", "pos": "PG", "ir": false, "cost": 6, "contract": 2029, "mustDrop": false, "keepThrough": "2028-29", "finalYear": false, "age": 20, "stats": [52, 179, 449, 124, 54, 65, 536, 165, 173, 42, 17, 86]}]}, {"owner_name": "Brian", "team_name": "To the Victor Belong the Spoils", "short_name": "bc", "budget": 195, "players": [{"id": "03ad3", "name": "Karl-Anthony Towns", "nba": "NY", "pos": "PF,C", "ir": false, "cost": 65, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 30, "stats": [75, 517, 1032, 113, 357, 416, 1504, 889, 226, 65, 40, 187]}, {"id": "03nwm", "name": "Devin Booker", "nba": "PHO", "pos": "PG,SG,SF", "ir": false, "cost": 55, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 29, "stats": [64, 546, 1198, 122, 454, 520, 1668, 248, 386, 51, 18, 201]}, {"id": "03lls", "name": "Jaylen Brown", "nba": "PHI", "pos": "SG,SF", "ir": false, "cost": 23, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 29, "stats": [71, 736, 1543, 140, 426, 536, 2038, 492, 364, 72, 27, 259]}, {"id": "06cch", "name": "Victor Wembanyama", "nba": "SA", "pos": "C", "ir": false, "cost": 16, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 22, "stats": [64, 553, 1080, 122, 372, 450, 1600, 736, 199, 66, 197, 155]}, {"id": "05qtt", "name": "Onyeka Okongwu", "nba": "ATL", "pos": "PF,C", "ir": false, "cost": 15, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 25, "stats": [74, 413, 860, 144, 153, 202, 1123, 562, 231, 82, 79, 127]}, {"id": "04qrn", "name": "Mikal Bridges", "nba": "NY", "pos": "SG,SF,PF", "ir": false, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 30, "stats": [82, 472, 963, 156, 81, 98, 1181, 312, 304, 107, 62, 83]}, {"id": "05uj0", "name": "Bones Hyland", "nba": "MIN", "pos": "PG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [71, 212, 468, 116, 64, 82, 604, 127, 188, 44, 17, 70]}, {"id": "06cbz", "name": "Brice Sensabaugh", "nba": "UTA", "pos": "SF,PF", "ir": true, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 22, "stats": [75, 394, 857, 162, 166, 201, 1116, 231, 143, 54, 12, 124]}, {"id": "0623e", "name": "Collin Gillespie", "nba": "PHO", "pos": "PG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [80, 352, 842, 232, 76, 87, 1012, 327, 371, 99, 16, 125]}, {"id": "06v5w", "name": "Nique Clifford", "nba": "SAC", "pos": "SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [75, 249, 596, 77, 70, 97, 645, 282, 179, 68, 24, 116]}, {"id": "06227", "name": "Ryan Rollins", "nba": "MIL", "pos": "PG,SG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [74, 486, 1030, 184, 125, 157, 1281, 338, 414, 110, 31, 201]}, {"id": "06v59", "name": "Will Riley", "nba": "WAS", "pos": "SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 20, "stats": [74, 271, 618, 78, 144, 180, 764, 212, 146, 54, 9, 94]}, {"id": "051ot", "name": "Tyler Herro", "nba": "MIL", "pos": "PG,SG", "ir": false, "cost": 7, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [33, 247, 515, 84, 99, 108, 677, 158, 136, 23, 12, 64]}, {"id": "03nwn", "name": "Bobby Portis", "nba": "MIA", "pos": "PF,C", "ir": true, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 31, "stats": [67, 366, 750, 135, 48, 68, 915, 428, 105, 41, 12, 66]}, {"id": "05uie", "name": "Scottie Barnes", "nba": "TOR", "pos": "SF,PF,C", "ir": false, "cost": 23, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 25, "stats": [80, 569, 1123, 68, 242, 297, 1448, 600, 474, 114, 116, 210]}, {"id": "04ewt", "name": "Derrick White", "nba": "BOS", "pos": "PG,SG", "ir": false, "cost": 21, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 32, "stats": [77, 437, 1108, 209, 184, 204, 1267, 338, 414, 88, 98, 134]}]}, {"owner_name": "Chase", "team_name": "Go Basketball", "short_name": "Chase", "budget": 197, "players": [{"id": "04qrk", "name": "Trae Young", "nba": "WAS", "pos": "PG", "ir": true, "cost": 59, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [15, 81, 177, 27, 80, 97, 269, 30, 120, 13, 2, 39]}, {"id": "049kd", "name": "Deandre Ayton", "nba": "WAS", "pos": "C", "ir": false, "cost": 37, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [72, 403, 601, 0, 91, 141, 897, 575, 59, 41, 70, 83]}, {"id": "027pe", "name": "Jimmy Butler", "nba": "GS", "pos": "SF,PF", "ir": true, "cost": 24, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 37, "stats": [38, 240, 462, 32, 248, 287, 760, 211, 185, 55, 8, 60]}, {"id": "027oz", "name": "Kawhi Leonard", "nba": "TOR", "pos": "SF,PF", "ir": false, "cost": 20, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 35, "stats": [65, 635, 1258, 172, 371, 416, 1813, 413, 234, 122, 27, 133]}, {"id": "02xg9", "name": "Rudy Gobert", "nba": "MIN", "pos": "C", "ir": false, "cost": 17, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 34, "stats": [76, 335, 491, 0, 159, 302, 829, 872, 128, 58, 124, 106]}, {"id": "06cac", "name": "Cason Wallace", "nba": "OKC", "pos": "PG,SG,SF", "ir": false, "cost": 15, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 22, "stats": [77, 252, 584, 101, 55, 68, 660, 238, 200, 150, 28, 73]}, {"id": "06mju", "name": "Alex Sarr", "nba": "WAS", "pos": "PF,C", "ir": false, "cost": 11, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 21, "stats": [48, 316, 656, 50, 101, 146, 783, 355, 130, 39, 95, 82]}, {"id": "06217", "name": "Dyson Daniels", "nba": "ATL", "pos": "PG,SG,SF", "ir": false, "cost": 11, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 23, "stats": [76, 402, 777, 22, 75, 122, 901, 520, 449, 149, 31, 135]}, {"id": "06mk7", "name": "Kelel Ware", "nba": "MIL", "pos": "PF,C", "ir": false, "cost": 11, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 22, "stats": [77, 344, 649, 92, 71, 96, 851, 694, 56, 59, 84, 62]}, {"id": "000zv", "name": "Al Horford", "nba": "GS", "pos": "PF,C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 40, "stats": [45, 138, 324, 74, 22, 26, 372, 219, 116, 30, 51, 42]}, {"id": "06cc1", "name": "Bilal Coulibaly", "nba": "WAS", "pos": "SG,SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 22, "stats": [56, 230, 541, 65, 132, 177, 657, 243, 145, 75, 54, 81]}, {"id": "06v88", "name": "Maxime Raynaud", "nba": "SAC", "pos": "PF,C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 23, "stats": [74, 383, 671, 24, 132, 168, 922, 556, 100, 38, 39, 94]}, {"id": "04qsd", "name": "Mitchell Robinson", "nba": "BOS", "pos": "C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [60, 149, 206, 0, 42, 103, 340, 525, 52, 56, 70, 41]}, {"id": "06226", "name": "Moussa Diabate", "nba": "CHA", "pos": "C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [73, 229, 363, 1, 116, 176, 575, 635, 141, 56, 72, 73]}, {"id": "051pb", "name": "Nicolas Claxton", "nba": "CHI", "pos": "C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [69, 333, 583, 3, 141, 229, 810, 478, 253, 45, 77, 96]}, {"id": "04ewu", "name": "Josh Hart", "nba": "NY", "pos": "SG,SF", "ir": false, "cost": 17, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 31, "stats": [66, 301, 592, 100, 90, 125, 792, 486, 317, 75, 17, 128]}]}, {"owner_name": "Jake", "team_name": "Trash Pandas", "short_name": "TP", "budget": 220, "players": [{"id": "03ad2", "name": "Myles Turner", "nba": "MIL", "pos": "C", "ir": false, "cost": 27, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 30, "stats": [71, 284, 646, 147, 131, 177, 846, 378, 103, 50, 115, 83]}, {"id": "0621l", "name": "Walker Kessler", "nba": "LAL", "pos": "C", "ir": false, "cost": 21, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [5, 26, 37, 6, 14, 20, 72, 54, 15, 7, 9, 16]}, {"id": "03al2", "name": "Joel Embiid", "nba": "PHI", "pos": "C", "ir": false, "cost": 20, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 32, "stats": [38, 341, 697, 53, 286, 335, 1021, 293, 150, 21, 46, 109]}, {"id": "042nm", "name": "Pascal Siakam", "nba": "IND", "pos": "SF,PF,C", "ir": false, "cost": 18, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 32, "stats": [62, 559, 1155, 105, 262, 378, 1485, 411, 236, 69, 25, 138]}, {"id": "04ex6", "name": "Isaiah Hartenstein", "nba": "OKC", "pos": "C", "ir": false, "cost": 17, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [47, 184, 296, 0, 64, 105, 432, 443, 166, 48, 36, 82]}, {"id": "05qtv", "name": "Tyrese Haliburton", "nba": "IND", "pos": "PG,SG", "ir": true, "cost": 17, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": null}, {"id": "03xmv", "name": "Jayson Tatum", "nba": "BOS", "pos": "SF,PF", "ir": false, "cost": 15, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [16, 118, 287, 47, 65, 79, 348, 160, 85, 22, 3, 39]}, {"id": "031lx", "name": "CJ McCollum", "nba": "ATL", "pos": "PG,SG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 35, "stats": [76, 525, 1154, 191, 183, 237, 1424, 252, 293, 64, 35, 135]}, {"id": "02nf6", "name": "Damian Lillard", "nba": "POR", "pos": "PG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 36, "stats": null}, {"id": "05uuq", "name": "Jock Landale", "nba": "ATL", "pos": "C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 30, "stats": [68, 282, 548, 74, 80, 126, 718, 387, 115, 35, 36, 60]}, {"id": "027oj", "name": "Kyrie Irving", "nba": "DAL", "pos": "PG,SG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 34, "stats": null}, {"id": "05ujd", "name": "Neemias Queta", "nba": "BOS", "pos": "C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [76, 326, 499, 1, 123, 175, 776, 636, 126, 60, 100, 75]}, {"id": "04qs4", "name": "Robert Williams", "nba": "POR", "pos": "C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [59, 177, 250, 9, 34, 57, 397, 415, 60, 35, 87, 49]}, {"id": "06v5l", "name": "Cooper Flagg", "nba": "DAL", "pos": "PG,SG,SF", "ir": false, "cost": 6, "contract": 2029, "mustDrop": false, "keepThrough": "2028-29", "finalYear": false, "age": 19, "stats": [70, 559, 1194, 72, 283, 342, 1473, 466, 316, 84, 64, 161]}, {"id": "051oi", "name": "Ja Morant", "nba": "POR", "pos": "PG", "ir": true, "cost": 32, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 27, "stats": [20, 132, 322, 20, 105, 117, 389, 65, 161, 20, 6, 71]}, {"id": "06215", "name": "Bennedict Mathurin", "nba": "NO", "pos": "SG,SF", "ir": false, "cost": 21, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 24, "stats": [54, 291, 677, 75, 292, 336, 949, 293, 129, 43, 13, 118]}]}, {"owner_name": "Jordan", "team_name": "Defending Champion", "short_name": "CHAMP", "budget": 184, "players": [{"id": "05uid", "name": "Evan Mobley", "nba": "CLE", "pos": "PF,C", "ir": false, "cost": 45, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [65, 469, 859, 62, 180, 297, 1180, 586, 234, 48, 113, 122]}, {"id": "01eo6", "name": "James Harden", "nba": "CLE", "pos": "PG,SG", "ir": false, "cost": 39, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 37, "stats": [70, 487, 1123, 215, 463, 524, 1652, 336, 557, 79, 28, 245]}, {"id": "05qsq", "name": "Tyrese Maxey", "nba": "PHI", "pos": "PG,SG", "ir": false, "cost": 25, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [70, 694, 1501, 220, 372, 417, 1980, 290, 461, 130, 55, 171]}, {"id": "0011e", "name": "LeBron James", "nba": "PHI", "pos": "SF,PF", "ir": false, "cost": 19, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 41, "stats": [60, 473, 919, 77, 233, 316, 1256, 364, 432, 72, 35, 179]}, {"id": "05uus", "name": "Austin Reaves", "nba": "LAL", "pos": "PG,SG,SF", "ir": false, "cost": 17, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 28, "stats": [51, 373, 762, 118, 323, 371, 1187, 240, 280, 56, 20, 151]}, {"id": "042n4", "name": "Jamal Murray", "nba": "DEN", "pos": "PG,SG", "ir": false, "cost": 17, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 29, "stats": [75, 657, 1360, 245, 346, 390, 1905, 330, 535, 66, 29, 171]}, {"id": "05qu0", "name": "Jaden McDaniels", "nba": "MIN", "pos": "SF,PF", "ir": false, "cost": 15, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 26, "stats": [73, 417, 809, 103, 147, 176, 1084, 310, 199, 81, 73, 131]}, {"id": "03el5", "name": "Kristaps Porzingis", "nba": "GS", "pos": "PF,C", "ir": false, "cost": 15, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 31, "stats": [32, 173, 388, 54, 133, 158, 533, 167, 81, 18, 38, 41]}, {"id": "01uyj", "name": "Paul George", "nba": "BOS", "pos": "SF,PF", "ir": false, "cost": 12, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 36, "stats": [37, 225, 513, 100, 91, 111, 641, 196, 133, 62, 16, 64]}, {"id": "05qzh", "name": "Naji Marshall", "nba": "DAL", "pos": "SG,SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [74, 419, 821, 62, 228, 300, 1128, 348, 241, 82, 6, 119]}, {"id": "05uug", "name": "Sam Hauser", "nba": "BOS", "pos": "SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [78, 252, 601, 198, 17, 20, 719, 300, 114, 38, 23, 35]}, {"id": "06v5h", "name": "Derik Queen", "nba": "NO", "pos": "PF,C", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 21, "stats": [81, 354, 748, 23, 217, 273, 948, 572, 298, 84, 74, 190]}, {"id": "05uic", "name": "Jalen Green", "nba": "PHO", "pos": "PG,SG", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [32, 216, 512, 71, 65, 87, 568, 116, 91, 34, 8, 72]}, {"id": "06mkg", "name": "Kyshawn George", "nba": "WAS", "pos": "SG,SF,PF", "ir": true, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 22, "stats": [48, 253, 577, 99, 105, 131, 710, 245, 214, 48, 43, 125]}, {"id": "06216", "name": "Shaedon Sharpe", "nba": "POR", "pos": "SG,SF", "ir": true, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 23, "stats": [50, 392, 868, 103, 155, 197, 1042, 217, 132, 70, 6, 147]}, {"id": "04qrl", "name": "Wendell Carter", "nba": "ORL", "pos": "C", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [78, 326, 637, 72, 198, 250, 922, 577, 154, 60, 49, 100]}]}, {"owner_name": "Kendall", "team_name": "Kenda-lllllllll", "short_name": "9L1T", "budget": 213, "players": [{"id": "049kb", "name": "DeAaron Fox", "nba": "SA", "pos": "PG,SG", "ir": false, "cost": 18, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [72, 509, 1047, 131, 187, 246, 1336, 270, 445, 89, 19, 164]}, {"id": "051os", "name": "P.J. Washington", "nba": "DAL", "pos": "SF,PF,C", "ir": false, "cost": 16, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [56, 296, 658, 76, 125, 182, 793, 394, 98, 55, 60, 94]}, {"id": "0527l", "name": "Luguentz Dort", "nba": "ATL", "pos": "SG,SF,PF", "ir": false, "cost": 15, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 27, "stats": [69, 202, 524, 128, 44, 58, 576, 245, 85, 62, 27, 54]}, {"id": "06mjw", "name": "Stephon Castle", "nba": "SA", "pos": "PG,SG", "ir": false, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 21, "stats": [68, 385, 817, 81, 282, 384, 1133, 362, 502, 78, 19, 217]}, {"id": "03ams", "name": "Zach LaVine", "nba": "SAC", "pos": "PG,SG,SF", "ir": true, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 31, "stats": [39, 262, 547, 99, 125, 142, 748, 108, 89, 28, 10, 74]}, {"id": "06cbx", "name": "Jaime Jaquez", "nba": "MIL", "pos": "SG,SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [75, 464, 915, 58, 166, 216, 1152, 375, 352, 51, 21, 152]}, {"id": "03aq2", "name": "Jerami Grant", "nba": "MEM", "pos": "SF,PF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 32, "stats": [57, 331, 730, 136, 262, 322, 1060, 198, 122, 42, 36, 119]}, {"id": "05uih", "name": "Jonathan Kuminga", "nba": "MIN", "pos": "PF,C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [36, 157, 339, 35, 89, 123, 438, 202, 83, 22, 11, 67]}, {"id": "005kc", "name": "Russell Westbrook", "nba": "SAC", "pos": "PG,SG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 37, "stats": [64, 358, 839, 128, 127, 183, 971, 348, 426, 83, 12, 209]}, {"id": "03ajv", "name": "Julius Randle", "nba": "BKN", "pos": "PF", "ir": false, "cost": 9, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 31, "stats": [79, 580, 1207, 109, 398, 496, 1667, 532, 398, 86, 18, 217]}, {"id": "01eon", "name": "DeMar DeRozan", "nba": "DEN", "pos": "SF,PF", "ir": false, "cost": 7, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 37, "stats": [77, 499, 1005, 47, 374, 431, 1419, 226, 316, 80, 23, 96]}, {"id": "06cc7", "name": "Brandin Podziemski", "nba": "GS", "pos": "SG,SF", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 23, "stats": [82, 394, 866, 153, 192, 241, 1133, 419, 304, 88, 15, 131]}, {"id": "06v5n", "name": "Kon Knueppel", "nba": "CHA", "pos": "PG,SG,SF", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 21, "stats": [81, 515, 1084, 273, 195, 226, 1498, 432, 274, 57, 19, 161]}, {"id": "051oj", "name": "RJ Barrett", "nba": "TOR", "pos": "SG,SF,PF", "ir": false, "cost": 6, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [57, 401, 816, 96, 200, 279, 1098, 300, 189, 42, 19, 99]}, {"id": "06v80", "name": "Ryan Kalkbrenner", "nba": "CHA", "pos": "C", "ir": false, "cost": 6, "contract": 2029, "mustDrop": false, "keepThrough": "2028-29", "finalYear": false, "age": 24, "stats": [69, 219, 291, 0, 83, 116, 521, 377, 54, 32, 101, 62]}, {"id": "0496e", "name": "Alex Caruso", "nba": "OKC", "pos": "PG,SG,SF", "ir": true, "cost": 20, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 32, "stats": [56, 127, 300, 53, 41, 51, 348, 155, 110, 72, 17, 48]}]}, {"owner_name": "Vaughn", "team_name": "Markkanen My Words", "short_name": "Vaughn", "budget": 205, "players": [{"id": "04qro", "name": "Shai Gilgeous-Alexander", "nba": "OKC", "pos": "PG", "ir": false, "cost": 85, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [68, 731, 1321, 115, 540, 614, 2117, 292, 448, 95, 52, 151]}, {"id": "0621b", "name": "Jalen Williams", "nba": "OKC", "pos": "SG,SF,PF", "ir": false, "cost": 21, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 25, "stats": [33, 216, 446, 23, 108, 129, 563, 152, 181, 39, 9, 63]}, {"id": "06ccf", "name": "Ausar Thompson", "nba": "DET", "pos": "SG,SF,PF", "ir": false, "cost": 16, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 23, "stats": [73, 303, 577, 6, 109, 191, 721, 418, 228, 146, 69, 110]}, {"id": "06cca", "name": "Brandon Miller", "nba": "CHA", "pos": "SG,SF,PF", "ir": false, "cost": 16, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 23, "stats": [65, 454, 1044, 204, 199, 223, 1311, 319, 217, 66, 44, 163]}, {"id": "06mk6", "name": "Bub Carrington", "nba": "WAS", "pos": "PG", "ir": false, "cost": 11, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 21, "stats": [82, 314, 741, 169, 81, 111, 878, 276, 381, 52, 17, 191]}, {"id": "06mk3", "name": "Matas Buzelis", "nba": "CHI", "pos": "SF,PF", "ir": false, "cost": 11, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 21, "stats": [77, 446, 963, 173, 187, 238, 1252, 448, 158, 55, 116, 159]}, {"id": "042nq", "name": "Dejounte Murray", "nba": "NO", "pos": "PG,SG", "ir": true, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 30, "stats": [14, 88, 182, 19, 39, 45, 234, 75, 89, 23, 3, 47]}, {"id": "05qt3", "name": "Desmond Bane", "nba": "ORL", "pos": "SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [82, 583, 1205, 167, 314, 346, 1647, 338, 338, 86, 37, 164]}, {"id": "05uif", "name": "Jalen Suggs", "nba": "ORL", "pos": "PG", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [57, 282, 649, 122, 100, 117, 786, 220, 312, 105, 40, 152]}, {"id": "0621e", "name": "Mark Williams", "nba": "PHO", "pos": "C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 24, "stats": [60, 282, 438, 1, 135, 175, 700, 477, 58, 55, 55, 65]}, {"id": "04qrr", "name": "Michael Porter", "nba": "BKN", "pos": "SF,PF", "ir": false, "cost": 9, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 28, "stats": [52, 444, 958, 176, 195, 227, 1259, 367, 158, 55, 13, 122]}, {"id": "06cby", "name": "Keyonte George", "nba": "UTA", "pos": "PG", "ir": false, "cost": 8, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 22, "stats": [54, 402, 881, 134, 337, 378, 1275, 199, 332, 58, 14, 166]}, {"id": "05uj4", "name": "Santi Aldama", "nba": "DAL", "pos": "PF,C", "ir": false, "cost": 8, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 25, "stats": [43, 228, 476, 70, 76, 114, 602, 287, 126, 37, 31, 55]}, {"id": "06v5k", "name": "VJ Edgecombe", "nba": "PHI", "pos": "SG", "ir": false, "cost": 6, "contract": 2029, "mustDrop": false, "keepThrough": "2028-29", "finalYear": false, "age": 21, "stats": [75, 451, 1030, 149, 148, 181, 1199, 423, 315, 107, 39, 137]}, {"id": "05uj1", "name": "Cameron Thomas", "nba": null, "pos": "SG,SF", "ir": false, "cost": 20, "contract": 2026, "mustDrop": true, "keepThrough": null, "finalYear": false, "age": 24, "stats": [42, 189, 461, 52, 137, 169, 567, 71, 108, 9, 4, 74]}]}, {"owner_name": "Yow", "team_name": "El Niño Maravilla", "short_name": "Yow", "budget": 190, "players": [{"id": "04kj6", "name": "Luka Doncic", "nba": "LAL", "pos": "PG,SG", "ir": false, "cost": 77, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [64, 693, 1457, 254, 503, 645, 2143, 495, 530, 105, 34, 255]}, {"id": "04ewe", "name": "Donovan Mitchell", "nba": "CLE", "pos": "PG,SG", "ir": false, "cost": 39, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 30, "stats": [70, 678, 1403, 224, 372, 430, 1952, 316, 398, 104, 20, 198]}, {"id": "001aw", "name": "Kevin Durant", "nba": "HOU", "pos": "SG,SF,PF", "ir": false, "cost": 35, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 38, "stats": [78, 716, 1376, 186, 408, 467, 2026, 426, 372, 62, 71, 246]}, {"id": "06ca8", "name": "Amen Thompson", "nba": "HOU", "pos": "PG,SG,SF,PF", "ir": false, "cost": 16, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 23, "stats": [79, 557, 1044, 25, 304, 390, 1443, 614, 420, 119, 48, 190]}, {"id": "05uir", "name": "Trey Murphy", "nba": "NO", "pos": "SG,SF,PF", "ir": false, "cost": 11, "contract": 2027, "mustDrop": false, "keepThrough": "2026-27", "finalYear": true, "age": 26, "stats": [66, 494, 1050, 214, 218, 246, 1420, 377, 250, 99, 24, 120]}, {"id": "03al0", "name": "Aaron Gordon", "nba": "DEN", "pos": "PF,C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 31, "stats": [36, 198, 398, 61, 125, 163, 582, 209, 96, 21, 10, 38]}, {"id": "05ujc", "name": "Ayo Dosunmu", "nba": "MIN", "pos": "PG,SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [69, 386, 747, 123, 127, 145, 1022, 237, 249, 58, 18, 96]}, {"id": "06228", "name": "Josh Minott", "nba": "BKN", "pos": "SF,PF,C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 23, "stats": [49, 126, 252, 64, 48, 61, 364, 158, 46, 44, 24, 43]}, {"id": "03r7z", "name": "Norman Powell", "nba": "CHI", "pos": "SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 33, "stats": [58, 421, 895, 156, 263, 318, 1261, 203, 143, 64, 14, 111]}, {"id": "05qtm", "name": "Precious Achiuwa", "nba": "SAC", "pos": "PF,C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 27, "stats": [73, 316, 598, 27, 77, 139, 736, 492, 101, 65, 50, 65]}, {"id": "06cc0", "name": "Taylor Hendricks", "nba": "MEM", "pos": "SF,PF,C", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 22, "stats": [59, 163, 355, 63, 49, 72, 438, 221, 55, 50, 30, 50]}, {"id": "031mb", "name": "Tim Hardaway", "nba": "MIA", "pos": "SG,SF", "ir": false, "cost": 10, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 34, "stats": [80, 348, 779, 224, 159, 196, 1079, 206, 108, 42, 10, 43]}, {"id": "05uiz", "name": "Quentin Grimes", "nba": "LAL", "pos": "SG,SF", "ir": false, "cost": 7, "contract": 2028, "mustDrop": false, "keepThrough": "2027-28", "finalYear": false, "age": 26, "stats": [75, 340, 755, 127, 199, 237, 1006, 273, 244, 64, 28, 133]}, {"id": "06v57", "name": "Ace Bailey", "nba": "UTA", "pos": "PG,SG,SF,PF", "ir": false, "cost": 6, "contract": 2029, "mustDrop": false, "keepThrough": "2028-29", "finalYear": false, "age": 20, "stats": [72, 395, 892, 137, 66, 88, 993, 302, 131, 60, 49, 107]}]}], "rookieOrder": [{"pick_no": 1, "earned_by": "Rookie bracket champion", "original": "Alex", "holder": "Alex", "note": "Beat Kenda-lllllllll 5-4 in the rookie-bracket final"}, {"pick_no": 2, "earned_by": "Rookie bracket runner-up", "original": "Kendall", "holder": "Kendall", "note": null}, {"pick_no": 3, "earned_by": "Rookie bracket 3rd place", "original": "Vaughn", "holder": "Vaughn", "note": "Beat Trash Pandas 7-2"}, {"pick_no": 4, "earned_by": "Rookie bracket 4th place", "original": "Jake", "holder": "Yow", "note": "Straight pick swap with Jake, 11/10/2025"}, {"pick_no": 5, "earned_by": "5th-place game winner", "original": "Adam", "holder": "Adam", "note": "Beat Go Basketball 6-3"}, {"pick_no": 6, "earned_by": "5th-place game loser", "original": "Chase", "holder": "Chase", "note": null}, {"pick_no": 7, "earned_by": "4th place", "original": "Austin", "holder": "Austin", "note": "Lost the 3rd-place tiebreak (4.5-4.5 game; regular-season head-to-head)"}, {"pick_no": 8, "earned_by": "3rd place", "original": "Jordan", "holder": "Jordan", "note": "Won the 3rd-place tiebreak on regular-season head-to-head"}, {"pick_no": 9, "earned_by": "Runner-up", "original": "Brian", "holder": "Brian", "note": "Lost the final 6-3"}, {"pick_no": 10, "earned_by": "Champion", "original": "Yow", "holder": "Jake", "note": "Straight pick swap with Yow, 11/10/2025"}], "moneyTrades": [{"payer": "Jake", "receiver": "Chase", "amount": 7, "fantrax_tx_set": "altmnzkdmh9jjrt6", "condition_text": null, "resolved_note": null, "comment": "Jake gives chase 7$", "date": "2025-10-27", "players": [{"player": "Kelel Ware", "from": "Chase", "to": "Jake"}, {"player": "Tari Eason", "from": "Jake", "to": "Chase"}]}, {"payer": "Yow", "receiver": "Jake", "amount": 10, "fantrax_tx_set": "cnu4qui8mhto4jzu", "condition_text": null, "resolved_note": null, "comment": "Rookie pick swap Jake Receives $10", "date": "2025-11-10", "players": [{"player": "Jayson Tatum", "from": "Yow", "to": "Jake"}, {"player": "Damian Lillard", "from": "Yow", "to": "Jake"}, {"player": "Chet Holmgren", "from": "Jake", "to": "Yow"}, {"player": "Paolo Banchero", "from": "Jake", "to": "Yow"}, {"player": "Amen Thompson", "from": "Jake", "to": "Yow"}]}, {"payer": "Chase", "receiver": "Jordan", "amount": 2, "fantrax_tx_set": "p7kj8h4jmi3ee1r6", "condition_text": null, "resolved_note": null, "comment": "Plus Chase gives Jordan $2", "date": "2025-11-17", "players": [{"player": "Ryan Kalkbrenner", "from": "Jordan", "to": "Chase"}, {"player": "Jaime Jaquez", "from": "Jordan", "to": "Chase"}, {"player": "Jeremiah Fears", "from": "Chase", "to": "Jordan"}, {"player": "Isaiah Hartenstein", "from": "Chase", "to": "Jordan"}]}, {"payer": "Jordan", "receiver": "Jake", "amount": 3, "fantrax_tx_set": "c6n1b09tmi3oe546", "condition_text": null, "resolved_note": null, "comment": "Jordan gives Jake $3", "date": "2025-11-17", "players": [{"player": "OG Anunoby", "from": "Jordan", "to": "Jake"}, {"player": "Darius Garland", "from": "Jordan", "to": "Jake"}, {"player": "Kelel Ware", "from": "Jake", "to": "Jordan"}, {"player": "Jamal Murray", "from": "Jake", "to": "Jordan"}]}, {"payer": "Jordan", "receiver": "Kendall", "amount": 10, "fantrax_tx_set": "6c5nfpvqmi8djii4", "condition_text": null, "resolved_note": null, "comment": "Jordan sends Kendall $10", "date": "2025-11-21", "players": [{"player": "DeAaron Fox", "from": "Jordan", "to": "Kendall"}, {"player": "DeMar DeRozan", "from": "Jordan", "to": "Kendall"}, {"player": "Russell Westbrook", "from": "Jordan", "to": "Kendall"}, {"player": "Kelel Ware", "from": "Jordan", "to": "Kendall"}, {"player": "Zach LaVine", "from": "Jordan", "to": "Kendall"}, {"player": "Anthony Edwards", "from": "Kendall", "to": "Jordan"}, {"player": "Evan Mobley", "from": "Kendall", "to": "Jordan"}, {"player": "Ja Morant", "from": "Kendall", "to": "Jordan"}]}, {"payer": "Chase", "receiver": "Kendall", "amount": 3, "fantrax_tx_set": "lgw8vtirmie9371y", "condition_text": "$2, or $3 if Kendall finished below Chase in 2025-26", "resolved_note": "Kendall finished below Chase, so it's $3.", "comment": null, "date": "2025-11-25", "players": [{"player": "Ryan Kalkbrenner", "from": "Chase", "to": "Kendall"}, {"player": "Jaime Jaquez", "from": "Chase", "to": "Kendall"}, {"player": "Kelel Ware", "from": "Kendall", "to": "Chase"}, {"player": "Bobby Portis", "from": "Kendall", "to": "Chase"}]}, {"payer": "Chase", "receiver": "Jake", "amount": 5, "fantrax_tx_set": "eqt0elg4mj8wdqm5", "condition_text": null, "resolved_note": null, "comment": "Chase gives 5$", "date": "2025-12-17", "players": [{"player": "Neemias Queta", "from": "Chase", "to": "Jake"}, {"player": "Jay Huff", "from": "Jake", "to": "Chase"}]}, {"payer": "Austin", "receiver": "Jake", "amount": 4, "fantrax_tx_set": "b1b48ep1mjha1edd", "condition_text": null, "resolved_note": null, "comment": "Austin sends Jake $4", "date": "2025-12-22", "players": [{"player": "Myles Turner", "from": "Austin", "to": "Jake"}, {"player": "Jabari Smith", "from": "Jake", "to": "Austin"}]}, {"payer": "Jordan", "receiver": "Jake", "amount": 5, "fantrax_tx_set": "k2b1ug7wmjti8ipt", "condition_text": null, "resolved_note": null, "comment": "Accidentally dropped someone in the original trade so resending. $5 going to Jake.", "date": "2025-12-31", "players": [{"player": "Robert Williams", "from": "Jordan", "to": "Jake"}, {"player": "Isaiah Hartenstein", "from": "Jordan", "to": "Jake"}, {"player": "Reed Sheppard", "from": "Jake", "to": "Jordan"}, {"player": "Jaden McDaniels", "from": "Jake", "to": "Jordan"}]}, {"payer": "Brian", "receiver": "Vaughn", "amount": 5, "fantrax_tx_set": "b6m7g9rvmkah3pha", "condition_text": null, "resolved_note": null, "comment": "Brian gives Vaughn $5 for the 2026 draft..", "date": "2026-01-11", "players": [{"player": "Scottie Barnes", "from": "Vaughn", "to": "Brian"}, {"player": "Tyler Herro", "from": "Vaughn", "to": "Brian"}, {"player": "Michael Porter", "from": "Brian", "to": "Vaughn"}, {"player": "Keyonte George", "from": "Brian", "to": "Vaughn"}]}, {"payer": "Austin", "receiver": "Alex", "amount": 10, "fantrax_tx_set": "7v3jniadmkairats", "condition_text": null, "resolved_note": null, "comment": "Austin sends $10", "date": "2026-01-11", "players": [{"player": "Miles Bridges", "from": "Alex", "to": "Austin"}, {"player": "Zion Williamson", "from": "Alex", "to": "Austin"}, {"player": "Keegan Murray", "from": "Austin", "to": "Alex"}]}], "pickTrades": [{"date": "2025-11-10", "parties": ["Yow", "Jake"], "summary": "Straight swap of 2026 rookie picks.", "players": [{"player": "Jayson Tatum", "from": "Yow", "to": "Jake"}, {"player": "Damian Lillard", "from": "Yow", "to": "Jake"}, {"player": "Chet Holmgren", "from": "Jake", "to": "Yow"}, {"player": "Paolo Banchero", "from": "Jake", "to": "Yow"}, {"player": "Amen Thompson", "from": "Jake", "to": "Yow"}], "extras": {"Yow": ["Rookie pick #4 (Jake's)"], "Jake": ["Rookie pick #10 (Yow's)", "$10 auction money"]}}]};
+const R = DATA.rules;
+const fmt = n => (n < 0 ? "-$" + Math.abs(n) : "$" + n);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const tip = text => `<span class="tip" tabindex="0" data-tip="${esc(text)}">?</span>`;
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+const dt = s => new Date(s);
+const day = s => dt(s + "T12:00").toLocaleDateString([], {month:"short", day:"numeric", year:"numeric"});
+
+// ---------- tooltips (hover on desktop, tap on phones) ----------
+const tipEl = document.getElementById("tooltip");
+let tipFor = null;
+function showTip(el){
+  tipFor = el; tipEl.textContent = el.dataset.tip; tipEl.classList.add("show");
+  const r = el.getBoundingClientRect(), w = tipEl.offsetWidth, h = tipEl.offsetHeight;
+  let x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8);
+  let y = r.bottom + 8; if (y + h > innerHeight - 8) y = r.top - h - 8;
+  tipEl.style.left = x + "px"; tipEl.style.top = y + "px";
+}
+function hideTip(){ tipFor = null; tipEl.classList.remove("show"); }
+document.addEventListener("mouseover", e => { const t = e.target.closest("[data-tip]"); if (t) showTip(t); });
+document.addEventListener("mouseout", e => { if (e.target.closest("[data-tip]")) hideTip(); });
+document.addEventListener("focusin", e => { const t = e.target.closest("[data-tip]"); if (t) showTip(t); });
+document.addEventListener("focusout", hideTip);
+document.addEventListener("click", e => { const t = e.target.closest("[data-tip]"); if (t) { tipFor === t ? hideTip() : showTip(t); } else hideTip(); });
+addEventListener("scroll", hideTip, {passive:true});
+
+// ---------- navigation ----------
+const SECTIONS = [["overview","Overview"],["rosters","Rosters & keepers"],["rookies","Rookie draft order"],["budgets","Auction budgets"],["trades","Money trades"]];
+document.getElementById("sideNav").innerHTML = SECTIONS.map(([id,t]) => `<li><a href="#${id}" data-s="${id}">${t}</a></li>`).join("");
+document.getElementById("mobileNav").innerHTML = SECTIONS.map(([id,t]) => `<a href="#${id}" data-s="${id}" role="tab">${t.replace(" & keepers","")}</a>`).join("");
+document.getElementById("seasonSmall").textContent = DATA.season + " keeper guide";
+document.getElementById("foot").textContent = "Rosters as of " + dt(DATA.snapshot.taken).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+const setNav = c => { document.body.classList.toggle("nav-collapsed", c); store.set("navCollapsed", c); };
+document.getElementById("closeNav").onclick = () => setNav(true);
+document.getElementById("openNav").onclick = () => setNav(false);
+setNav(store.get("navCollapsed", false));
+
+function route(){
+  const [sec, arg] = (location.hash.slice(1) || "overview").split("/");
+  const id = SECTIONS.some(s => s[0] === sec) ? sec : "overview";
+  document.querySelectorAll("section").forEach(s => s.classList.toggle("on", s.id === id));
+  document.querySelectorAll("[data-s]").forEach(a => a.classList.toggle("on", a.dataset.s === id));
+  if (id === "rosters") selectTeam(decodeURIComponent(arg || store.get("team", DATA.teams[0].owner_name)));
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+document.getElementById("dates").innerHTML = [
+  ["Keepers due", dt(DATA.dates.keeperDeadline), true],
+  ["Rookie draft", dt(DATA.dates.keeperDeadline), false],
+  ["Auction draft", dt(DATA.dates.auction), true],
+].map(([k, d, t]) => `<div class="date">${k}<b>${d.toLocaleDateString([], {weekday:"short",month:"short",day:"numeric"})}${t ? ", " + d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}) + " ET" : " (by text)"}</b></div>`).join("");
+
+document.getElementById("ovCards").innerHTML = [
+  ["rosters", "Rosters & keepers", "Every roster with keeper costs. Check players to plan your keepers."],
+  ["rookies", "Rookie draft order", "Picks 1-10 and any traded picks."],
+  ["budgets", "Auction budgets", "Each team's 2026-27 auction money."],
+  ["trades", "Money trades", "The trades behind those budgets."],
+].map(([id, t, d]) => `<a class="panel" href="#${id}"><b>${t}</b><span>${d}</span></a>`).join("");
+
+// ---------- keeper planner ----------
+const chips = document.getElementById("teamChips");
+chips.innerHTML = DATA.teams.map(t => `<button class="chip" role="tab" data-owner="${esc(t.owner_name)}">${esc(t.owner_name)}</button>`).join("");
+chips.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) location.hash = "rosters/" + encodeURIComponent(b.dataset.owner); });
+
+let current = null;
+function selectTeam(owner){
+  current = DATA.teams.find(t => t.owner_name === owner) || DATA.teams[0];
+  store.set("team", current.owner_name);
+  chips.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.owner === current.owner_name));
+  renderTeam();
+}
+const planKey = t => `plan:${DATA.season}:${t.owner_name}`;
+const getPlan = t => store.get(planKey(t), null) || { keep: [], rookie: true };
+const showStats = () => store.get("showStats", true);
+document.body.classList.toggle("hide-stats", !showStats());
+
+// stats = [gp,fgm,fga,tpm,ftm,fta,pts,reb,ast,stl,blk,tov]
+const CATS = [["PTS",6],["REB",7],["AST",8],["STL",9],["BLK",10],["3PM",3],["FG%","fg"],["FT%","ft"],["TO",11]];
+const val = (s, k) => k === "fg" ? (s[2] ? s[1] / s[2] : 0) : k === "ft" ? (s[5] ? s[4] / s[5] : 0) : s[k] / s[0];
+const show = (s, k) => (k === "fg" || k === "ft") ? val(s, k).toFixed(3).replace(/^0/, "") : val(s, k).toFixed(1);
+// Rank each category against every rostered player with 10+ games. TO is reversed (fewer is better).
+const POOL = DATA.teams.flatMap(t => t.players).filter(p => p.stats && p.stats[0] >= 10);
+const SORTED = Object.fromEntries(CATS.map(([, k]) => [k, POOL.map(p => val(p.stats, k)).sort((a, b) => a - b)]));
+function pctile(s, k){
+  const arr = SORTED[k], v = val(s, k);
+  let lo = 0; while (lo < arr.length && arr[lo] < v) lo++;
+  const q = lo / arr.length;
+  return k === 11 ? 1 - q : q;
+}
+const heat = (s, k) => {
+  const q = pctile(s, k);
+  return q >= .5 ? `background:rgba(var(--heat),${((q - .5) * 2 * .45).toFixed(2)})`
+                 : `background:rgba(var(--cold),${((.5 - q) * 2 * .3).toFixed(2)})`;
+};
+function statCells(p){
+  const s = p.stats;
+  if (!s) return `<td class="statcol grp dnp" colspan="${CATS.length + 1}">Did not play in ${DATA.statsSeason}</td>`;
+  return `<td class="num statcol grp">${s[0]}</td>` + CATS.map(([, k]) => `<td class="num statcol h" style="${heat(s, k)}">${show(s, k)}</td>`).join("");
+}
+function mobileStats(p){
+  const s = p.stats;
+  if (!s) return `<div class="mstat dnp">Did not play in ${DATA.statsSeason}</div>`;
+  return `<div class="mstat"><div class="pills"><span class="pill">GP<b>${s[0]}</b></span>`
+    + CATS.map(([c, k]) => `<span class="pill" style="${heat(s, k)}">${c}<b>${show(s, k)}</b></span>`).join("") + `</div></div>`;
+}
+
+function renderTeam(){
+  const t = current, plan = getPlan(t);
+  const keepSet = new Set(plan.keep.filter(id => t.players.some(p => p.id === id && !p.mustDrop)));
+  const kept = t.players.filter(p => keepSet.has(p.id));
+  const keeperCost = kept.reduce((s, p) => s + (p.cost || 0), 0);
+  const rookie = plan.rookie ? 1 : 0;
+  const left = t.budget - keeperCost - rookie * R.rookieCost;
+  const spots = R.rosterSpots - kept.length - rookie;
+  const maxBid = spots > 0 ? left - (spots - 1) : 0;
+  const mustDrop = t.players.filter(p => p.mustDrop);
+
+  const issues = [];
+  if (left < 0) issues.push(["bad", `Keepers cost ${fmt(-left)} more than the auction budget.`]);
+  if (spots < 0) issues.push(["bad", `${-spots} over the ${R.rosterSpots}-man roster.`]);
+  if (left >= 0 && spots > 0 && left < spots) issues.push(["bad", `Not enough money to fill ${spots} spots at $1 each.`]);
+  const irKept = kept.filter(p => p.ir);
+  if (irKept.length) issues.push(["warn", `IR must be empty at keeper processing: ${irKept.map(p => p.name).join(", ")}.`]);
+  let status;
+  if (issues.length) status = issues[0].concat(issues.length > 1 ? [issues.slice(1).map(i => i[1]).join(" ")] : []);
+  else if (kept.length) status = ["ok", `Valid plan: ${kept.length} keeper${kept.length > 1 ? "s" : ""}, ${fmt(left)} for ${spots} spot${spots === 1 ? "" : "s"}.`];
+  else status = ["idle", "Check the players you'd keep."];
+
+  const rows = t.players.map(p => {
+    const on = keepSet.has(p.id);
+    const badges = (p.mustDrop ? `<span class="badge drop" data-tip="Contract is up. He can't be kept and goes back into the auction pool.">MUST DROP</span>` : "")
+      + (p.ir ? `<span class="badge ir" data-tip="On IR now. IR must be emptied when keepers are processed and stay empty through the auction.">IR</span>` : "")
+      + (!p.mustDrop && p.contract ? `<span class="badge cy" data-tip="Contract year ${p.contract}: he must be dropped before the ${p.contract}-${String(p.contract + 1).slice(2)} season, so he can be kept through ${p.keepThrough}.">${p.contract}</span>` : "");
+    return `<tr class="${p.mustDrop ? "drop" : on ? "kept" : ""}">
+      <td><input type="checkbox" class="keep" data-id="${p.id}" ${on ? "checked" : ""} ${p.mustDrop ? "disabled" : ""} aria-label="Keep ${esc(p.name)}"></td>
+      <td class="player"><span class="pname">${esc(p.name)}</span>${badges}<div class="pmeta">${[(p.pos || "").split(",").join("/"), p.nba, p.age ? "age " + p.age : ""].filter(Boolean).map(x => `<span class="nw">${esc(x)}</span>`).join(" · ")}</div>${mobileStats(p)}</td>
+      <td class="num"><b>${p.mustDrop ? "-" : fmt(p.cost)}</b></td>
+      ${statCells(p)}
+    </tr>`;
+  }).join("");
+
+  document.getElementById("teamView").innerHTML = `
+    <div class="teamhead"><h2>${esc(t.owner_name)} <span class="tn">· ${esc(t.team_name)}</span></h2>
+      <span class="pmeta">${t.players.length} rostered · ${mustDrop.length} must drop</span></div>
+    <div class="calc">
+      <div class="stats">
+        <div class="stat"><div class="k">Budget${tip("2026-27 auction budget: $200 plus or minus last season's money trades.")}</div><div class="v">${fmt(t.budget)}</div></div>
+        <div class="stat"><div class="k">Keepers (${kept.length})</div><div class="v">${fmt(keeperCost)}</div></div>
+        <div class="stat"><div class="k">Rookie pick${tip("Every rookie pick costs $1 and takes a roster spot. Turn off with the toggle below.")}</div><div class="v">${fmt(rookie * R.rookieCost)}</div></div>
+        <div class="stat ${left < 0 ? "neg" : "hi"}"><div class="k">Left</div><div class="v">${fmt(left)}</div></div>
+        <div class="stat ${spots < 0 ? "neg" : ""}"><div class="k">Open spots${tip("14 roster spots minus keepers minus the rookie pick.")}</div><div class="v">${spots}</div></div>
+        <div class="stat"><div class="k">Max bid${tip("Most you can bid on one player while still leaving $1 for every other open spot.")}</div><div class="v">${spots > 0 && left > 0 ? fmt(maxBid) : "-"}</div></div>
+      </div>
+      <div class="status ${status[0]}">${esc(status[1])}${status[2] ? tip(status[2]) : ""}</div>
+    </div>
+    <div class="toolbar">
+      <button class="btn" id="keepAll">Check all keepable</button>
+      <button class="btn" id="clearAll">Clear</button>
+      <button class="btn primary" id="copyPlan">Copy my plan</button>${tip("Copies a one-line summary of your keepers and money left, ready to paste in the group text.")}
+      <span class="toggles">
+        <label class="tog"><input type="checkbox" id="rookieTog" ${plan.rookie ? "checked" : ""}> Rookie pick</label>
+        <label class="tog"><input type="checkbox" id="statsTog" ${showStats() ? "checked" : ""}> ${DATA.statsSeason} stats</label>
+      </span>
+    </div>
+    <div class="panel scroll"><table>
+      <thead><tr><th style="width:40px">Keep</th><th>Player</th>
+        <th class="num">Cost${tip("Keeper price for 2026-27, as Fantrax shows it today.")}</th>
+        <th class="num statcol grp">GP${tip(`${DATA.statsSeason} regular season. Per-game averages; FG% and FT% are season totals. Green/red shading ranks each stat against every rostered player (10+ games). TO is reversed: fewer is greener.`)}</th>
+        ${CATS.map(([c]) => `<th class="num statcol">${c}</th>`).join("")}
+      </tr></thead>
+      <tbody>${rows}</tbody></table>
+      <div class="legend statlegend">Weak <i style="background:rgba(var(--cold),.3)"></i><i style="background:var(--chip)"></i><i style="background:rgba(var(--heat),.45)"></i> Strong</div></div>`;
+
+  const save = upd => { store.set(planKey(t), Object.assign(getPlan(t), upd)); renderTeam(); };
+  document.querySelectorAll("#teamView .keep").forEach(cb => cb.addEventListener("change", () => {
+    const s = new Set(getPlan(t).keep); cb.checked ? s.add(cb.dataset.id) : s.delete(cb.dataset.id); save({ keep: [...s] });
+  }));
+  document.getElementById("keepAll").onclick = () => save({ keep: t.players.filter(p => !p.mustDrop).map(p => p.id) });
+  document.getElementById("clearAll").onclick = () => save({ keep: [] });
+  document.getElementById("rookieTog").onchange = e => save({ rookie: e.target.checked });
+  document.getElementById("statsTog").onchange = e => { store.set("showStats", e.target.checked); document.body.classList.toggle("hide-stats", !e.target.checked); };
+  document.getElementById("copyPlan").onclick = async e => {
+    const txt = `${t.owner_name} keepers (${kept.length}): ` + (kept.map(p => `${p.name} ${fmt(p.cost)}`).join(", ") || "none")
+      + `\nKeepers ${fmt(keeperCost)} · Left for auction ${fmt(left)} · Open spots ${spots}`;
+    try { await navigator.clipboard.writeText(txt); e.target.textContent = "Copied"; }
+    catch(err){ prompt("Copy this:", txt); }
+    setTimeout(() => { e.target.textContent = "Copy my plan"; }, 1500);
+  };
+}
+
+// ---------- trades as "who gets what" tables ----------
+function tradeCard({ title, date, money, sides, note }){
+  const [a, b] = Object.keys(sides);
+  const list = items => `<ul>${items.map(([cls, txt]) => `<li class="${cls}">${esc(txt)}</li>`).join("") || "<li class='muted'>-</li>"}</ul>`;
+  return `<div class="panel trade">
+    <div class="head"><span class="title">${esc(title)}${money ? `<span class="money">${esc(money)}</span>` : ""}${note ? tip(note) : ""}</span><span class="d">${day(date)}</span></div>
+    <table class="swap"><thead><tr><th>${esc(a)} gets</th><th>${esc(b)} gets</th></tr></thead>
+      <tbody><tr><td>${list(sides[a])}</td><td>${list(sides[b])}</td></tr></tbody></table></div>`;
+}
+function sidesFor(a, b, players){
+  const sides = { [a]: [], [b]: [] };
+  players.forEach(m => (sides[m.to] = sides[m.to] || []).push(["", m.player]));
+  return sides;
+}
+
+// ---------- rookie order ----------
+const teamOf = o => (DATA.teams.find(t => t.owner_name === o) || {}).team_name || "";
+const ownerTag = o => `${esc(o)}<span class="tname">${esc(teamOf(o))}</span>`;
+document.getElementById("rookieList").innerHTML = DATA.rookieOrder.map(r => `
+  <div class="panel pick"><div class="n">${r.pick_no}</div>
+    <div><div class="who">${r.holder !== r.original ? `${ownerTag(r.original)}<span class="arrow">→</span>${ownerTag(r.holder)}` : ownerTag(r.holder)}${r.note ? tip(r.note) : ""}</div>
+    <div class="how">${esc(r.earned_by)}</div></div><span></span></div>`).join("");
+document.getElementById("pickTrades").innerHTML = DATA.pickTrades.map(p => {
+  const [a, b] = p.parties, sides = sidesFor(a, b, p.players);
+  Object.entries(p.extras || {}).forEach(([o, items]) => items.forEach(x => sides[o].unshift([x.startsWith("$") ? "cash" : "pk", x])));
+  return tradeCard({ title: `${a} ↔ ${b}`, date: p.date, sides, note: p.summary });
+}).join("");
+
+// ---------- budgets ----------
+(function(){
+  const rows = DATA.teams.map(t => {
+    const sent = DATA.moneyTrades.filter(m => m.payer === t.owner_name).reduce((s, m) => s + m.amount, 0);
+    const recv = DATA.moneyTrades.filter(m => m.receiver === t.owner_name).reduce((s, m) => s + m.amount, 0);
+    return { t, sent, recv, pct: (t.budget - R.band[0]) / (R.band[1] - R.band[0]) * 100 };
+  }).sort((a, b) => b.t.budget - a.t.budget);
+  document.getElementById("budgetTable").innerHTML = `
+    <thead><tr><th>Owner</th><th class="num">Start</th><th class="num">Received</th><th class="num">Sent</th><th class="num">2026-27</th><th class="hide-sm">$180 – $220${tip("Where each budget sits in the allowed range. The line marks $200.")}</th></tr></thead>
+    <tbody>${rows.map(({t, sent, recv, pct}) => `<tr>
+      <td><a href="#rosters/${encodeURIComponent(t.owner_name)}" class="pname">${esc(t.owner_name)}</a> <span class="pmeta">${esc(t.team_name)}</span></td>
+      <td class="num">${fmt(R.baseBudget)}</td>
+      <td class="num">${recv ? `<span class="pos">+${fmt(recv)}</span>` : "-"}</td>
+      <td class="num">${sent ? `<span class="negv">-${fmt(sent)}</span>` : "-"}</td>
+      <td class="num"><b>${fmt(t.budget)}</b></td>
+      <td class="hide-sm"><div class="band"><span class="mid"></span><i style="left:calc(${pct}% - 1px)"></i></div></td></tr>`).join("")}</tbody>`;
+})();
+
+// ---------- money trades ----------
+const tf = document.getElementById("tradeFilter");
+tf.innerHTML = ["All", ...DATA.teams.map(t => t.owner_name)].map(o => `<button class="chip${o === "All" ? " on" : ""}" data-o="${esc(o)}">${esc(o)}</button>`).join("");
+function renderTrades(owner){
+  tf.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.o === owner));
+  const list = DATA.moneyTrades.filter(m => owner === "All" || m.payer === owner || m.receiver === owner).slice().reverse();
+  document.getElementById("tradeList").innerHTML = list.length ? list.map(m => {
+    const sides = sidesFor(m.payer, m.receiver, m.players);
+    sides[m.receiver].unshift(["cash", `${fmt(m.amount)} auction money`]);
+    const note = [m.comment ? `Fantrax note: "${m.comment}"` : "", m.condition_text ? `Side bet: ${m.condition_text}. ${m.resolved_note || ""}` : ""].filter(Boolean).join("  ");
+    return tradeCard({ title: `${m.payer} ↔ ${m.receiver}`, date: m.date, money: `${fmt(m.amount)} to ${m.receiver}`, sides, note });
+  }).join("") : `<div class="panel trade"><div class="head muted">No money trades for ${esc(owner)}.</div></div>`;
+}
+tf.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) renderTrades(b.dataset.o); });
+renderTrades("All");
+
+route();
+</script>
+</body>
+</html>
